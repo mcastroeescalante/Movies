@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
 import {UpcomingList} from './UpcomingList';
+import {TopRatedList} from './TopRatedList';
+import {PopularList} from './PopularList';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -91,10 +93,10 @@ function App() {
         <UpcomingList />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Page Two
+        <TopRatedList />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Page Three
+        <PopularList />
       </TabPanel>
     </div>
   );
