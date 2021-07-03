@@ -1,103 +1,104 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {NavLink} from 'react-router-dom';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Toolbar from '@material-ui/core/Toolbar';
+
+import { Switch,Route } from 'react-router-dom';
 
 import {UpcomingList} from './UpcomingList';
 import {TopRatedList} from './TopRatedList';
 import {PopularList} from './PopularList';
+import {Movie} from './Movie';
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: any;
-  value: any;
+import {icons} from './common/Icons';
+import IconButton from '@material-ui/core/IconButton';
+
+
+const tabs = [{
+  path:'/upcoming',
+  label:'Upcoming'
+},
+{
+  path:'/top_rated',
+  label:'Top Rated TV Shows'
+},
+{
+  path:'/popular',
+  label:'Popular'
 }
+];
 
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`nav-tabpanel-${index}`}
-      aria-labelledby={`nav-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-function a11yProps(index: any) {
-  return {
-    id: `nav-tab-${index}`,
-    'aria-controls': `nav-tabpanel-${index}`,
-  };
-}
-
-interface LinkTabProps {
-  label?: string;
-  href?: string;
-}
-
-function LinkTab(props: LinkTabProps) {
-  return (
-    <Tab
-      component="a"
-      onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        event.preventDefault();
-      }}
-      {...props}
-    />
-  );
-}
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
   },
+  grow: {
+    flexGrow: 1,
+  },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
+    },
+  },
+  link:{
+    textDecoration: "solid",
+    color: "white",
+  },
 }));
 
 function App() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
-  };
 
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Tabs
-          variant="fullWidth"
-          value={value}
-          onChange={handleChange}
-          aria-label="nav tabs example"
-        >
-          <LinkTab label="Upcoming" href="/upcoming" {...a11yProps(0)} />
-          <LinkTab label="Top Rated" href="/top_rated" {...a11yProps(1)} />
-          <LinkTab label="Popular" href="/popular" {...a11yProps(2)} />
-        </Tabs>
+      <Toolbar>
+      <Grid container spacing={3}>
+        {tabs.map((tab) => (
+          <Grid item xs={3}>
+          <Button color="inherit">
+            <NavLink to={tab.path} className={classes.link} activeStyle={{ textDecoration: "underline",
+              textDecorationColor: "red",
+              textDecorationStyle: "double" }}>
+                          {tab.label}
+            </NavLink>
+        </Button>
+        </Grid>
+        ))}
+        </Grid>
+        <div className={classes.grow} />
+        <div className={classes.sectionDesktop}>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <icons.profile />
+            </IconButton>
+          </div>
+        </Toolbar>
       </AppBar>
-      <TabPanel value={value} index={0}>
-        <UpcomingList />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <TopRatedList />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <PopularList />
-      </TabPanel>
+      <Switch>
+        <Route  path="/upcoming">
+          {<UpcomingList/>}
+        </Route>
+        <Route path="/top_rated">
+          {<TopRatedList/>}
+        </Route>
+        <Route path="/popular">
+          {<PopularList/>}
+        </Route>
+        <Route path="/movie/:id">
+          {<Movie/>}
+        </Route>
+      </Switch>
     </div>
   );
 }

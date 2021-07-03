@@ -8,3 +8,5 @@ export default axios.create({
       api_key: API_KEY
   }
 });
+
+export const imageUrl = "https://image.tmdb.org/t/p/w780";
